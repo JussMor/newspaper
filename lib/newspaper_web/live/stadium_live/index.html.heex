@@ -1,0 +1,42 @@
+<.header>
+  Listing Stadiums
+  <:actions>
+    <.link patch={~p"/stadiums/new"}>
+      <.button>New Stadium</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="stadiums"
+  rows={@streams.stadiums}
+  row_click={fn {_id, stadium} -> JS.navigate(~p"/stadiums/#{stadium}") end}
+>
+  <:col :let={{_id, stadium}} label="Name"><%= stadium.name %></:col>
+  <:col :let={{_id, stadium}} label="City"><%= stadium.city %></:col>
+  <:action :let={{_id, stadium}}>
+    <div class="sr-only">
+      <.link navigate={~p"/stadiums/#{stadium}"}>Show</.link>
+    </div>
+    <.link patch={~p"/stadiums/#{stadium}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, stadium}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: stadium.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="stadium-modal" show on_cancel={JS.patch(~p"/stadiums")}>
+  <.live_component
+    module={NewspaperWeb.StadiumLive.FormComponent}
+    id={@stadium.id || :new}
+    title={@page_title}
+    action={@live_action}
+    stadium={@stadium}
+    patch={~p"/stadiums"}
+  />
+</.modal>

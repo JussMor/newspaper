@@ -18,6 +18,12 @@ defmodule NewspaperWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    get "/players", PlayersController, :player
+    live "/stadiums", StadiumLive.Index, :index
+    live "/stadiums/new", StadiumLive.Index, :new
+    live "/stadiums/:id/edit", StadiumLive.Index, :edit
+    live "/stadiums/:id", StadiumLive.Show, :show
+    live "/stadiums/:id/show/edit", StadiumLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.

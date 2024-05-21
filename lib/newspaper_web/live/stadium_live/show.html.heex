@@ -1,0 +1,27 @@
+<.header>
+  Stadium <%= @stadium.id %>
+  <:subtitle>This is a stadium record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/stadiums/#{@stadium}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit stadium</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @stadium.name %></:item>
+  <:item title="City"><%= @stadium.city %></:item>
+</.list>
+
+<.back navigate={~p"/stadiums"}>Back to stadiums</.back>
+
+<.modal :if={@live_action == :edit} id="stadium-modal" show on_cancel={JS.patch(~p"/stadiums/#{@stadium}")}>
+  <.live_component
+    module={NewspaperWeb.StadiumLive.FormComponent}
+    id={@stadium.id}
+    title={@page_title}
+    action={@live_action}
+    stadium={@stadium}
+    patch={~p"/stadiums/#{@stadium}"}
+  />
+</.modal>
