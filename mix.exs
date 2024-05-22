@@ -33,6 +33,7 @@ defmodule Newspaper.MixProject do
   defp deps do
     [
       {:phoenix, "~> 1.7.12"},
+      {:quantum, "~> 3.5"},
       {:phoenix_ecto, "~> 4.6.1"},
       {:ecto_sql, "~> 3.10"},
       {:postgrex, ">= 0.0.0"},
@@ -40,7 +41,7 @@ defmodule Newspaper.MixProject do
       {:phoenix_live_reload, "~> 1.5.3", only: :dev},
       {:phoenix_live_view, "~> 1.0.0-rc.0", override: true},
       {:phoenix_live_dashboard, "~> 0.8.3"},
-      {:floki, ">= 0.30.0", only: :test},
+      {:floki, ">= 0.33.0", only: :test},
       {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
       {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
       {:heroicons,

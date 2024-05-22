@@ -17,7 +17,8 @@ defmodule Newspaper.Application do
       # Start a worker by calling: Newspaper.Worker.start_link(arg)
       # {Newspaper.Worker, arg},
       # Start to serve requests, typically the last entry
-      NewspaperWeb.Endpoint
+      NewspaperWeb.Endpoint,
+      NewspaperWeb.Cron.Scheduler
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

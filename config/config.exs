@@ -31,6 +31,18 @@ config :newspaper, NewspaperWeb.Endpoint,
 # at the `config/runtime.exs`.
 config :newspaper, Newspaper.Mailer, adapter: Swoosh.Adapters.Local
 
+config :newspaper, NewspaperWeb.Cron.Scheduler,
+  jobs: [
+    # Every minute
+    {"* * * * *",       {NewspaperWeb.Cron.Comercio, :send_daily_newsletter, []}},
+    # # Every 15 minutes
+    # {"*/15 * * * *",   fn -> System.cmd("rm", ["/tmp/tmp_"]) end},
+    # # Runs on 18, 20, 22, 0, 2, 4, 6:
+    # {"0 18-6/2 * * *", fn -> :mnesia.backup('/var/backup/mnesia') end},
+    # # Runs every midnight:
+    # {"@daily",         {Backup, :backup, []}}
+  ]
+
 # Configure esbuild (the version is required)
 config :esbuild,
   version: "0.17.11",
