@@ -1,0 +1,8 @@
+<.header>
+  Edit Champion <%= @champion.id %>
+  <:subtitle>Use this form to manage champion records in your database.</:subtitle>
+</.header>
+
+<.champion_form changeset={@changeset} action={~p"/champions/#{@champion}"} />
+
+<.back navigate={~p"/champions"}>Back to champions</.back>

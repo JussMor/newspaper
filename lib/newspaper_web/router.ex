@@ -18,7 +18,16 @@ defmodule NewspaperWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    get "/champions", ChampionController, :index
+    get "/champions/new",  ChampionController, :new
+    get "/champions/:id", ChampionController, :show
+    post "/champions", ChampionController, :create
+    put "/champions/:id", ChampionController, :update
+    get "/champions/:id/edit", ChampionController, :edit
+    delete "/champions/:id", ChampionController, :delete
+
     get "/players", PlayersController, :player
+    
     live "/stadiums", StadiumLive.Index, :index
     live "/stadiums/new", StadiumLive.Index, :new
     live "/stadiums/:id/edit", StadiumLive.Index, :edit

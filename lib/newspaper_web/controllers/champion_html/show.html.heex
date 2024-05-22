@@ -1,0 +1,16 @@
+<.header>
+  Champion <%= @champion.id %>
+  <:subtitle>This is a champion record from your database.</:subtitle>
+  <:actions>
+    <.link href={~p"/champions/#{@champion}/edit"}>
+      <.button>Edit champion</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @champion.name %></:item>
+  <:item title="Age"><%= @champion.age %></:item>
+</.list>
+
+<.back navigate={~p"/champions"}>Back to champions</.back>
