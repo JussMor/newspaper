@@ -1,0 +1,46 @@
+<.header>
+  Listing Lasnews
+  <:actions>
+    <.link patch={~p"/lasnews/new"}>
+      <.button>New Last new</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="lasnews"
+  rows={@streams.lasnews}
+  row_click={fn {_id, last_new} -> JS.navigate(~p"/lasnews/#{last_new}") end}
+>
+  <:col :let={{_id, last_new}} label="Url"><%= last_new.url %></:col>
+  <:col :let={{_id, last_new}} label="Cover"><%= last_new.cover %></:col>
+  <:col :let={{_id, last_new}} label="Created at"><%= last_new.created_at %></:col>
+  <:col :let={{_id, last_new}} label="Title feed"><%= last_new.title_feed %></:col>
+  <:col :let={{_id, last_new}} label="Title excerpt"><%= last_new.title_excerpt %></:col>
+  <:col :let={{_id, last_new}} label="Resume"><%= last_new.resume %></:col>
+  <:action :let={{_id, last_new}}>
+    <div class="sr-only">
+      <.link navigate={~p"/lasnews/#{last_new}"}>Show</.link>
+    </div>
+    <.link patch={~p"/lasnews/#{last_new}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, last_new}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: last_new.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="last_new-modal" show on_cancel={JS.patch(~p"/lasnews")}>
+  <.live_component
+    module={NewspaperWeb.LastNewLive.FormComponent}
+    id={@last_new.id || :new}
+    title={@page_title}
+    action={@live_action}
+    last_new={@last_new}
+    patch={~p"/lasnews"}
+  />
+</.modal>

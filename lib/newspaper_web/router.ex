@@ -27,12 +27,19 @@ defmodule NewspaperWeb.Router do
     delete "/champions/:id", ChampionController, :delete
 
     get "/players", PlayersController, :player
-    
+
     live "/stadiums", StadiumLive.Index, :index
     live "/stadiums/new", StadiumLive.Index, :new
     live "/stadiums/:id/edit", StadiumLive.Index, :edit
     live "/stadiums/:id", StadiumLive.Show, :show
     live "/stadiums/:id/show/edit", StadiumLive.Show, :edit
+
+    live "/lasnews", LastNewLive.Index, :index
+    live "/lasnews/new", LastNewLive.Index, :new
+    live "/lasnews/:id/edit", LastNewLive.Index, :edit
+    live "/lasnews/:id", LastNewLive.Show, :show
+    live "/lasnews/:id/show/edit", LastNewLive.Show, :edit
+
   end
 
   # Other scopes may use custom stacks.

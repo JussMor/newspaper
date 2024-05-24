@@ -1,0 +1,31 @@
+<.header>
+  Last new <%= @last_new.id %>
+  <:subtitle>This is a last_new record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/lasnews/#{@last_new}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit last_new</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Url"><%= @last_new.url %></:item>
+  <:item title="Cover"><%= @last_new.cover %></:item>
+  <:item title="Created at"><%= @last_new.created_at %></:item>
+  <:item title="Title feed"><%= @last_new.title_feed %></:item>
+  <:item title="Title excerpt"><%= @last_new.title_excerpt %></:item>
+  <:item title="Resume"><%= @last_new.resume %></:item>
+</.list>
+
+<.back navigate={~p"/lasnews"}>Back to lasnews</.back>
+
+<.modal :if={@live_action == :edit} id="last_new-modal" show on_cancel={JS.patch(~p"/lasnews/#{@last_new}")}>
+  <.live_component
+    module={NewspaperWeb.LastNewLive.FormComponent}
+    id={@last_new.id}
+    title={@page_title}
+    action={@live_action}
+    last_new={@last_new}
+    patch={~p"/lasnews/#{@last_new}"}
+  />
+</.modal>
