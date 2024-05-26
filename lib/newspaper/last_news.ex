@@ -17,8 +17,13 @@ defmodule Newspaper.LastNews do
       [%LastNew{}, ...]
 
   """
-  def list_lasnews do
-    Repo.all(LastNew)
+ def list_lasnews(opts \\ [page: 1, page_size: 10]) do
+    page = Keyword.get(opts, :page, 1)
+    page_size = Keyword.get(opts, :page_size, 10)
+
+    LastNew
+    |> order_by([n], desc: n.inserted_at)
+    |> Repo.paginate(page: page, page_size: page_size)
   end
 
   @doc """

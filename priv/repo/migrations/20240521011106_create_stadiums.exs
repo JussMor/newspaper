@@ -3,7 +3,7 @@ defmodule Newspaper.Repo.Migrations.CreateStadiums do
 
   def change do
     create table(:stadiums) do
-      add :name, :string
+      add :name, :text
       add :city, :string
 
       timestamps(type: :utc_datetime)

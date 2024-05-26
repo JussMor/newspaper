@@ -44,4 +44,30 @@ defmodule NewspaperWeb.StadiumLive.Index do
 
     {:noreply, stream_delete(socket, :stadiums, stadium)}
   end
+
+  @impl true
+  def handle_event("save-editor-content", %{"content" => content}, socket) do
+    # Serialize the content map to a JSON string
+    name = Jason.encode!(content)
+
+    # Arbitrary city value, modify as needed
+    city = "City Name"
+
+    # Save to database
+    case Stadiums.create_stadium(%{name: name, city: city}) do
+      {:ok, stadium} ->
+        # Decode the JSON 'name' back to a map for sending as content
+        content_decoded = Jason.decode!(stadium.name)
+
+        IO.inspect(content_decoded)
+
+        {:noreply, push_event(socket, "content-saved", %{content: content_decoded})}
+
+      {:error, _changeset} ->
+        # If there's an error, send back the error message
+        push_event(socket, "content-saved", %{content: "Error saving stadium"})
+        {:noreply, socket}
+    end
+  end
+
 end

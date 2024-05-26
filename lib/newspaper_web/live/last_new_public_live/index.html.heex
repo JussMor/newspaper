@@ -1,0 +1,22 @@
+<div class="flex gap-2 md:gap-x-6 md:gap-y-3 flex-wrap justify-center">
+  <%= for {id, lastnew} <- @streams.lastnews do %>
+    <div
+      class=" max-w-[339px] sm:w-full  p-4 border rounded-lg shadow"
+      id={"news-item-#{id}"}
+    >
+      <img src={lastnew.cover} alt="" class="w-full" />
+      <h2 class="text-xl font-bold pt-4"><%= lastnew.title_feed %></h2>
+      <p class="text-gray-700"><%= lastnew.title_excerpt %></p>
+    </div>
+  <% end %>
+</div>
+<div class="flex justify-center mt-4 space-x-4">
+  <%= if @page > 1 do %>
+    <a href="#" class="px-4 py-2 text-white bg-black rounded hover:bg-gray-700 transition-colors" phx-click="paginate" phx-value-page={@page - 1}>Previous</a>
+  <% end %>
+  <span class="px-4 py-2 bg-gray-100 text-black rounded">Page <%= @page %> of <%= @total_pages %></span>
+  <%= if @page < @total_pages do %>
+    <a href="#" class="px-4 py-2 text-white bg-black rounded hover:bg-gray-700 transition-colors" phx-click="paginate" phx-value-page={@page + 1}>Next</a>
+  <% end %>
+</div>
+

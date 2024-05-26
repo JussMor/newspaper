@@ -32,7 +32,9 @@ defmodule Newspaper.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:bcrypt_elixir, "~> 3.0"},
       {:phoenix, "~> 1.7.12"},
+      {:scrivener_ecto, "~> 2.7"},
       {:quantum, "~> 3.5"},
       {:phoenix_ecto, "~> 4.6.1"},
       {:ecto_sql, "~> 3.10"},
