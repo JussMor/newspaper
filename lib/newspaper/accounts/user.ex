@@ -9,6 +9,14 @@ defmodule Newspaper.Accounts.User do
     field :current_password, :string, virtual: true, redact: true
     field :confirmed_at, :naive_datetime
 
+    has_many :social_medias, Newspaper.SocialMedias.SocialMedia
+    has_many :user_roles, Newspaper.UserRoles.UserRole
+    has_many :roles, through: [:user_roles, :role]
+    has_many :role_permissions, through: [:roles, :role_permissions]
+    has_many :permissions, through: [:role_permissions, :permission]
+    has_many :articles, Newspaper.Contents.Article
+
+
     timestamps(type: :utc_datetime)
   end
 
