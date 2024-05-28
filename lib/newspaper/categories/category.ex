@@ -6,6 +6,8 @@ defmodule Newspaper.Categories.Category do
     field :name, :string
     field :description, :string
 
+    has_one :article, Newspaper.Contents.Article
+
     timestamps(type: :utc_datetime)
   end
 

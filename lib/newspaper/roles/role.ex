@@ -6,10 +6,9 @@ defmodule Newspaper.Roles.Role do
     field :name, :string
     field :description, :string
 
-    has_many :role_permissions, Newspaper.RolPermissions.RolPermission
-    has_many :permissions, through: [:role_permissions, :permission]
-    has_many :user_roles, Newspaper.UserRoles.UserRole
-    has_many :users, through: [:user_roles, :user]
+    many_to_many :users, Newspaper.Accounts.User, join_through: "user_roles"
+    many_to_many :permissions, Newspaper.Permissions.Permission, join_through: "role_permissions"
+
 
     timestamps(type: :utc_datetime)
   end

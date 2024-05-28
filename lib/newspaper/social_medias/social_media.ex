@@ -5,6 +5,7 @@ defmodule Newspaper.SocialMedias.SocialMedia do
   schema "social_medias" do
     field :url, :string
     field :platform, :string
+    
     belongs_to :user, Newspaper.Accounts.User
 
     timestamps(type: :utc_datetime)

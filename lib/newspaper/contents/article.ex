@@ -5,6 +5,7 @@ defmodule Newspaper.Contents.Article do
   schema "articles" do
     field :title, :string
     field :content, :string
+    
     belongs_to :user, Newspaper.Accounts.User
     belongs_to :category, Newspaper.Categories.Category
     has_one :seo, Newspaper.Seos.Seo
