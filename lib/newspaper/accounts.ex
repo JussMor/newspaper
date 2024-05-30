@@ -44,19 +44,8 @@ defmodule Newspaper.Accounts do
     if User.valid_password?(user, password), do: user
   end
 
-  
-  @doc """
-  Used for Roles and permissions
-  """
-  def get_user_data(%User{} = user) do
-    roles = Enum.map(user.roles, & &1.name)
-    permissions = Enum.flat_map(user.roles, fn role -> Enum.map(role.permissions, & &1.name) end)
 
-    %{
-      roles: roles,
-      permissions: permissions
-    }
-  end
+
 
 
   @doc """
