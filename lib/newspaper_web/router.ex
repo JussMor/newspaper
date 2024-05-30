@@ -45,6 +45,7 @@ defmodule NewspaperWeb.Router do
 
     live "/ultimas-noticias", LastNewPublicLive.Index, :index
 
+
     live "/articles", ArticleLive.Index, :index
     live "/articles/new", ArticleLive.Index, :new
     live "/articles/:id/edit", ArticleLive.Index, :edit
@@ -97,6 +98,8 @@ defmodule NewspaperWeb.Router do
 
     live_session :require_authenticated_user,
       on_mount: [{NewspaperWeb.UserAuth, :ensure_authenticated}] do
+      live "/authrouter", AppLive.Index, :index
+      
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
     end

@@ -1,0 +1,21 @@
+<.live_component
+  module={NewspaperWeb.AuthComponent}
+  id={1}
+  data={@data}
+  permission_to_check={["update_article"]}
+>
+  <div>
+    <h1>Manage Articles</h1>
+    <p>You have permission to edit or delete articles.</p>
+  </div>
+</.live_component>
+
+<.live_component
+  module={NewspaperWeb.AuthComponent}
+  id={2}
+  data={@data}
+  permission_to_check={["update_article", "delete_article"]}
+>
+  <h1>Admin or Editor Dashboard</h1>
+  <p>Welcome, <%= @current_user.email %>!</p>
+</.live_component>
