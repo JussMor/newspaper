@@ -20,6 +20,7 @@ alias Newspaper.RolPermissions.RolPermission
 alias Newspaper.SocialMedias.SocialMedia
 alias Newspaper.Contents.Article
 alias Newspaper.Seos.Seo
+alias Newspaper.PermissionCategories.PermissionCategory
 require Bcrypt
 
 # Create and insert users
@@ -79,17 +80,37 @@ for user_role <- user_roles do
   end
 end
 
-# Define and insert permissions
-permissions = [
-  %Permission{name: "update_user", description: "Update user"},
-  %Permission{name: "delete_user", description: "Delete user"},
-  %Permission{name: "insert_user", description: "Insert user"},
-  %Permission{name: "user_read_only", description: "Read-only user"},
-  %Permission{name: "update_article", description: "Update article"},
-  %Permission{name: "delete_article", description: "Delete article"},
-  %Permission{name: "insert_article", description: "Insert article"},
-  %Permission{name: "article_read_only", description: "Read-only article"}
+# Step 1: Define and insert permission categories
+permission_categories = [
+  %PermissionCategory{name: "user_settings", description: "Permissions related to user settings"},
+  %PermissionCategory{name: "article_management", description: "Permissions related to article management"}
 ]
+
+inserted_permission_categories = for category <- permission_categories do
+  case Repo.insert(category) do
+    {:ok, category} -> category
+    {:error, changeset} ->
+      IO.inspect(changeset.errors, label: "Error inserting permission category #{category.name}")
+      nil
+  end
+end
+|> Enum.filter(& &1) # Filter out nil values
+
+# Step 2: Map category names to their IDs
+category_id_map = Enum.into(inserted_permission_categories, %{}, fn %PermissionCategory{id: id, name: name} -> {name, id} end)
+
+# Step 3: Define permissions with their categories and insert them
+permissions = [
+  %Permission{name: "update_user", description: "Update user", permission_category_id: category_id_map["user_settings"]},
+  %Permission{name: "delete_user", description: "Delete user", permission_category_id: category_id_map["user_settings"]},
+  %Permission{name: "insert_user", description: "Insert user", permission_category_id: category_id_map["user_settings"]},
+  %Permission{name: "user_read_only", description: "Read-only user", permission_category_id: category_id_map["user_settings"]},
+  %Permission{name: "update_article", description: "Update article", permission_category_id: category_id_map["article_management"]},
+  %Permission{name: "delete_article", description: "Delete article", permission_category_id: category_id_map["article_management"]},
+  %Permission{name: "insert_article", description: "Insert article", permission_category_id: category_id_map["article_management"]},
+  %Permission{name: "article_read_only", description: "Read-only article", permission_category_id: category_id_map["article_management"]}
+]
+
 
 inserted_permissions = for permission <- permissions do
   case Repo.insert(permission) do
