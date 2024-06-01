@@ -1,11 +1,6 @@
-  <h1>Admin or Editor Dashboard</h1>
-  <p>Welcome, <%= @current_user.email %>!</p>
-
-
-
 <.live_component
     module={NewspaperWeb.AuthComponent}
-    id={5}
+    id={9}
     data={@current_user}
     permission_to_check={["insert_article"]}
   >

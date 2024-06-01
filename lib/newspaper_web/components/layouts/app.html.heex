@@ -1,20 +1,13 @@
-<main class="px-4 py-10 sm:px-6 lg:px-8">
-  <div class="mx-auto max-w-6xl">
-    <.flash_group flash={@flash} />
-    <%= @inner_content %>
-  </div>
+<main>
+
+    <div class="flex ">
+      <.live_component module={NewspaperWeb.SidebarComponent} id={"live_component-1"} />
+      <div class="p-4">
+        <.flash_group flash={@flash} />
+        <%= @inner_content %>
+      </div>
+    </div>
+
 </main>
 
-<%= if @current_user do %>
-<.live_component
-    module={NewspaperWeb.AuthComponent}
-    id={2}
-    data={@current_user}
-    permission_to_check={["insert_article"]}
-  >
-    <div>
-      <h1>Manage Articles</h1>
-      <p>You have permission to edit or delete articles.</p>
-    </div>
-</.live_component>
-<% end %>
+

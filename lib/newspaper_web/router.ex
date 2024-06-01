@@ -1,4 +1,5 @@
 defmodule NewspaperWeb.Router do
+
   use NewspaperWeb, :router
 
   import NewspaperWeb.UserAuth
@@ -99,7 +100,11 @@ defmodule NewspaperWeb.Router do
     live_session :require_authenticated_user,
       on_mount: [{NewspaperWeb.UserAuth, :ensure_authenticated}] do
       live "/authrouter", AppLive.Index, :index
-      
+
+      live "/roles", RolesLive.Index, :index
+      live "/roles/new", RolesLive.Index, :new
+      live "/roles/:id/edit", RolesLive.Index, :edit
+
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
     end
