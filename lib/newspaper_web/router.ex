@@ -1,5 +1,4 @@
 defmodule NewspaperWeb.Router do
-
   use NewspaperWeb, :router
 
   import NewspaperWeb.UserAuth
@@ -104,6 +103,9 @@ defmodule NewspaperWeb.Router do
       live "/roles", RolesLive.Index, :index
       live "/roles/new", RolesLive.Index, :new
       live "/roles/:id/edit", RolesLive.Index, :edit
+
+      live "/permissions", PermissionLive.Index, :index
+      live "/role_permission", RolePermissionLive.Index, :index
 
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email

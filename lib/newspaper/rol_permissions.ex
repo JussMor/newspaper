@@ -35,7 +35,21 @@ defmodule Newspaper.RolPermissions do
       ** (Ecto.NoResultsError)
 
   """
-  def get_rol_permission!(id), do: Repo.get!(RolPermission, id)
+  # def get_rol_permission!(id), do: Repo.get!(RolPermission, id)
+
+  def get_rol_permission!(role_id) do
+    Repo.all(from rp in RolPermission, where: rp.role_id == ^role_id, select: rp.permission_id)
+  end
+
+  def toggle_role_permission(role_id, permission_id) do
+    case Repo.get_by(RolPermission, role_id: role_id, permission_id: permission_id) do
+      nil ->
+        %RolPermission{role_id: role_id, permission_id: permission_id}
+        |> Repo.insert()
+      role_permission ->
+        Repo.delete(role_permission)
+    end
+  end
 
   @doc """
   Creates a rol_permission.
