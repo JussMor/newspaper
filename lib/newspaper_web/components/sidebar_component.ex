@@ -1,9 +1,21 @@
 defmodule NewspaperWeb.SidebarComponent do
   use Phoenix.LiveComponent
 
+  alias Phoenix.LiveView.JS
+
+  def hide_modal(js \\ %JS{}, selector) do
+  js
+  |> JS.hide( transition: "-translate-x-full",
+              time: 1000,
+              to: selector)
+  end
+
+
   def render(assigns) do
     ~H"""
     <aside
+      id="modal"
+      phx-remove={hide_modal("#modal")}
       classs="sidebarToggle ? 'translate-x-0' : '-translate-x-full'"
       class="absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0"
       @click.outside="sidebarToggle = false"
@@ -11,10 +23,10 @@ defmodule NewspaperWeb.SidebarComponent do
       <!-- SIDEBAR HEADER -->
       <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
         <a href="index.html">
-          <img src="./images/logo/logo.svg" alt="Logo" />
+          <img src="#" alt="Logo" />
         </a>
 
-        <button class="block lg:hidden" @click.stop="sidebarToggle = !sidebarToggle">
+        <button class="block lg:hidden"   phx-click={hide_modal("#modal")}>
           <svg
             class="fill-current"
             width="20"
@@ -44,8 +56,10 @@ defmodule NewspaperWeb.SidebarComponent do
                 <a
                   class="group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
                   href="#"
-                  @click.prevent="selected = (selected === 'Dashboard' ? '':'Dashboard')"
-                  classs="{ 'bg-graydark dark:bg-meta-4': (selected === 'Dashboard') || (page === 'ecommerce' || page === 'analytics' || page === 'stocks') }"
+                  phx-click={JS.toggle(to: "#item-dashboard",
+                            in: {"ease-in duration-300", "opacity-0 -translate-y-8", "opacity-100 translate-y-0"},
+                            out: {"ease-out duration-300", "opacity-100 -translate-y-0 ", "opacity-20 -translate-y-8"})
+                            }
                 >
                   <svg
                     class="fill-current"
@@ -92,8 +106,8 @@ defmodule NewspaperWeb.SidebarComponent do
                 </a>
                 <!-- Dropdown Menu Start -->
                 <div
-                  class="translate transform overflow-hidden"
-                  classs="(selected === 'Dashboard') ? 'block' :'hidden'"
+                  id="item-dashboard"
+                  class="translate transform overflow-hidden hidden"
                 >
                   <ul class="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
                     <li>
@@ -171,6 +185,10 @@ defmodule NewspaperWeb.SidebarComponent do
               <!-- Menu Item Forms -->
               <li>
                 <a
+                 phx-click={JS.toggle(to: "#item-forms",
+                            in: {"ease-in duration-300", "opacity-0 -translate-y-8", "opacity-100 translate-y-0"},
+                            out: {"ease-out duration-300", "opacity-100 -translate-y-0 ", "opacity-20 -translate-y-8"})
+                            }
                   class="group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
                   href="#"
                   @click.prevent="selected = (selected === 'Forms' ? '':'Forms')"
@@ -225,8 +243,8 @@ defmodule NewspaperWeb.SidebarComponent do
                 </a>
                 <!-- Dropdown Menu Start -->
                 <div
-                  class="translate transform overflow-hidden"
-                  classs="(selected === 'Forms') ? 'block' :'hidden'"
+                  id="item-forms"
+                  class="translate transform overflow-hidden hidden"
                 >
                   <ul class="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
                     <li>
@@ -370,6 +388,10 @@ defmodule NewspaperWeb.SidebarComponent do
               <!-- Menu Item Ui Elements -->
               <li>
                 <a
+                  phx-click={JS.toggle(to: "#item-uielements",
+                            in: {"ease-in duration-300", "opacity-0 -translate-y-8", "opacity-100 translate-y-0"},
+                            out: {"ease-out duration-300", "opacity-100 -translate-y-0 ", "opacity-50 -translate-y-8"})
+                            }
                   class="group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
                   href="#"
                   @click.prevent="selected = (selected === 'UiElements' ? '':'UiElements')"
@@ -423,7 +445,8 @@ defmodule NewspaperWeb.SidebarComponent do
                 </a>
                 <!-- Dropdown Menu Start -->
                 <div
-                  class="translate transform overflow-hidden"
+                  id="item-uielements"
+                  class="translate transform overflow-hidden hidden"
                   classs="(selected === 'UiElements') ? 'block' :'hidden'"
                 >
                   <ul class="mb-3 mt-4 flex flex-col gap-2 pl-6">
@@ -455,6 +478,10 @@ defmodule NewspaperWeb.SidebarComponent do
               <!-- Menu Item Auth Pages -->
               <li>
                 <a
+                   phx-click={JS.toggle(to: "#item-authpages",
+                            in: {"ease-in duration-300", "opacity-0 -translate-y-8", "opacity-100 translate-y-0"},
+                            out: {"ease-out duration-300", "opacity-100 -translate-y-0 ", "opacity-50 -translate-y-8"})
+                            }
                   class="group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
                   href="#"
                   @click.prevent="selected = (selected === 'AuthPages' ? '':'AuthPages')"
@@ -504,8 +531,8 @@ defmodule NewspaperWeb.SidebarComponent do
                 </a>
                 <!-- Dropdown Menu Start -->
                 <div
-                  class="translate transform overflow-hidden"
-                  classs="(selected === 'AuthPages') ? 'block' :'hidden'"
+                  id="item-authpages"
+                  class="translate transform overflow-hidden hidden"
                 >
                   <ul class="mb-3 mt-4 flex flex-col gap-2 pl-6">
                     <li>
@@ -536,22 +563,10 @@ defmodule NewspaperWeb.SidebarComponent do
         </nav>
         <!-- Sidebar Menu -->
 
-        <!-- Promo Box -->
-        <div class="mx-auto mb-10 w-full max-w-60 rounded-sm border border-strokedark bg-boxdark px-4 py-6 text-center shadow-default">
-          <h3 class="mb-1 font-semibold text-white">TailAdmin Pro</h3>
-          <p class="mb-4 text-xs">Get All Dashboards and 300+ UI Elements</p>
-          <a
-            href="https://tailadmin.com/pricing"
-            target="_blank"
-            rel="nofollow"
-            class="flex items-center justify-center rounded-md bg-primary p-2 text-white hover:bg-opacity-95"
-          >
-            Purchase Now
-          </a>
-        </div>
-        <!-- Promo Box -->
       </div>
     </aside>
     """
   end
+
+
 end
