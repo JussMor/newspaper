@@ -4,7 +4,7 @@ defmodule NewspaperWeb.OffcanvasComponent do
     def  offcanvas(assigns) do
     ~H"""
     <div
-        class="offcanvas translate-x-full fixed top-20 right-0 border-l border-gray-300 transition-all duration-300 transform-none h-full visible bg-white z-50 max-w-xs"
+        class="offcanvas translate-x-full fixed top-0 right-0 border-l border-gray-300 transition-all duration-300 transform-none h-full visible bg-white z-[59] max-w-xs"
         tabindex="-1"
         id="offcanvasRight"
         aria-labelledby="offcanvasRightLabel"

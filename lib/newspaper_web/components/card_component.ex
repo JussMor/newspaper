@@ -3,7 +3,7 @@ defmodule NewspaperWeb.CardComponent do
 
   def card(assigns) do
     ~H"""
-    <div class="card rounded-md shadow" style="width: 390px">
+    <div class="card shadow" style="width: 390px">
       <img
         class="w-full h-auto rounded-t-md"
         src="/images/cards/cards-01.png"

@@ -87,6 +87,7 @@ defmodule NewspaperWeb do
       import NewspaperWeb.CoreComponents
       import NewspaperWeb.HeaderComponent
       import NewspaperWeb.PaginationComponent
+      import NewspaperWeb.AccordionComponent
       import NewspaperWeb.OffcanvasComponent
       import NewspaperWeb.TooltipComponent
       import NewspaperWeb.TabsComponent
