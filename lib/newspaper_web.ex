@@ -87,6 +87,23 @@ defmodule NewspaperWeb do
       import NewspaperWeb.CoreComponents
       import NewspaperWeb.HeaderComponent
       import NewspaperWeb.PaginationComponent
+      import NewspaperWeb.OffcanvasComponent
+      import NewspaperWeb.TooltipComponent
+      import NewspaperWeb.TabsComponent
+      import NewspaperWeb.TablesComponent
+      import NewspaperWeb.SpinnersComponent
+      import NewspaperWeb.ProgressComponent
+      import NewspaperWeb.ListComponent
+      import NewspaperWeb.CardComponent
+      import NewspaperWeb.CollapseComponent
+      import NewspaperWeb.ButtongroupComponent
+      import NewspaperWeb.ButtonComponent
+      import NewspaperWeb.BadgeComponent
+      import NewspaperWeb.BreadcrumbComponent
+      import NewspaperWeb.DropdownComponent
+      import NewspaperWeb.AvatarComponent
+      import NewspaperWeb.AlertComponent
+      import NewspaperWeb.SidebarComponent
       import NewspaperWeb.Gettext
 
       # Shortcut for generating JS commands
