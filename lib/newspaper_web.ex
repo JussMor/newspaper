@@ -85,6 +85,8 @@ defmodule NewspaperWeb do
       import Phoenix.HTML
       # Core UI components and translation
       import NewspaperWeb.CoreComponents
+      import NewspaperWeb.HeaderComponent
+      import NewspaperWeb.PaginationComponent
       import NewspaperWeb.Gettext
 
       # Shortcut for generating JS commands

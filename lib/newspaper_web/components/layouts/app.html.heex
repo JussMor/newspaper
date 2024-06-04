@@ -3,8 +3,18 @@
   <.flash_group flash={@flash} />
     <div class="flex ">
       <.live_component module={NewspaperWeb.SidebarComponent} id={"live_component-1"} />
-      <div class="p-4">
-        <%= @inner_content %>
+      <div class="flex-1">
+          <.top_nav>
+            Listing Lasnews
+            <:actions>
+              <.link patch={~p"/lasnews/new"}>
+                <.button>New Last new</.button>
+              </.link>
+              </:actions>
+            </.top_nav>
+          <div class="p-4">
+            <%= @inner_content %>
+          </div>
       </div>
     </div>
 
