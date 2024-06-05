@@ -2,10 +2,10 @@
 
   <.flash_group flash={@flash} />
 
-    <%= if @current_user do %>
-    <div class="flex ">
+  <div class="flex ">
+      <%= if @current_user do %>
        <.live_component module={NewspaperWeb.SidebarComponent} id={"live_component-1"}  current_user={@current_user} />
-
+      <% end %>
       <div class="flex-1">
           <.top_nav>
             Listing Lasnews
@@ -14,13 +14,14 @@
                 <.button>New Last new</.button>
               </.link>
               </:actions>
-            </.top_nav>
-          <div class="p-4">
+            </.top_nav>  
+
+          <div >
             <%= @inner_content %>
           </div>
       </div>
     </div>
-    <% end %>
+
 
 </main>
 

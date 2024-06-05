@@ -7,10 +7,9 @@ defmodule NewspaperWeb.RolesLive.Index do
   @impl true
   def render(assigns) do
     ~H"""
-
-    <div>
+    <div class='px-4 pt-4'>
       <.header>
-        Listing Lasnews
+        Listing Roles
         <:actions>
           <.link patch={~p"/settings/roles/new"}>
             <.button>New Role</.button>
@@ -19,34 +18,48 @@ defmodule NewspaperWeb.RolesLive.Index do
       </.header>
     </div>
 
-    <div>
-      <h1>Roles</h1>
-      <ul id="roles-list" phx-update="stream">
-        <%= for {id, role} <- @streams.roles do %>
-          <li id={id}>
-            <strong><%= role.name %></strong><br>
-            <em><%= role.description %></em><br>
-            <.link patch={~p"/settings/roles/#{role.id}/edit"}>Edit</.link>
-            <.link
-              phx-click={JS.push("delete", value: %{id: role.id}) |> hide("##{id}")}
-              data-confirm="Are you sure?"
-            >
-              Delete
-            </.link>
-          </li>
-        <% end %>
-      </ul>
+
+
+  <div class="ml-6 sm:mx-6 mt-11 grid grid-cols-1 grid-rows-1 grid-flow-row-dense gap-6">
+      <.table
+        id="roles"
+        rows={@streams.roles}
+        row_click={fn {_id, role} -> JS.navigate(~p"/settings/roles/#{role}") end}
+      >
+        <:col :let={{_id, role}} label="Role"><%= role.name %></:col>
+        <:col :let={{_id, role}} label="Description"><%= role.description %></:col>
+        <:action :let={{_id, role}}>
+          <div class="sr-only">
+            <.link navigate={~p"/settings/roles/#{role}"}>Show</.link>
+          </div>
+          <.link patch={~p"/settings/roles/#{role}/edit"}>Edit</.link>
+        </:action>
+        <:action :let={{id, role}}>
+          <.link
+            phx-click={JS.push("delete", value: %{id: role.id}) |> hide("##{id}")}
+            data-confirm="Are you sure?"
+          >
+            Delete
+          </.link>
+        </:action>
+      </.table>
     </div>
 
-    <.modal :if={@live_action in [:new, :edit]} id="roles-modal" show on_cancel={JS.patch(~p"/settings/roles")}>
-        <.live_component
-          module={NewspaperWeb.RolesLive.FormComponent}
-          id={@role.id || :new}
-          title={@page_title}
-          action={@live_action}
-          role={@role}
-          patch={~p"/settings/roles"}
-        />
+
+    <.modal
+      :if={@live_action in [:new, :edit]}
+      id="roles-modal"
+      show
+      on_cancel={JS.patch(~p"/settings/roles")}
+    >
+      <.live_component
+        module={NewspaperWeb.RolesLive.FormComponent}
+        id={@role.id || :new}
+        title={@page_title}
+        action={@live_action}
+        role={@role}
+        patch={~p"/settings/roles"}
+      />
     </.modal>
     """
   end
@@ -54,6 +67,7 @@ defmodule NewspaperWeb.RolesLive.Index do
   @impl true
   def mount(_params, _session, socket) do
     roles = Roles.list_roles()
+    IO.inspect(roles)
     {:ok, stream(socket, :roles, roles)}
   end
 
@@ -92,5 +106,4 @@ defmodule NewspaperWeb.RolesLive.Index do
 
     {:noreply, stream_delete(socket, :roles, role)}
   end
-
 end

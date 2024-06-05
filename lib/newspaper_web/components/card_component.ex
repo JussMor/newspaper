@@ -1,7 +1,7 @@
 defmodule NewspaperWeb.CardComponent do
   use Phoenix.Component
 
-  def card(assigns) do
+  def card(%{type: "simple-card"} = assigns) do
     ~H"""
     <div class="card shadow" style="width: 390px">
       <img
@@ -24,4 +24,13 @@ defmodule NewspaperWeb.CardComponent do
     </div>
     """
   end
+
+  def card(assigns) do
+    ~H"""
+    <div class="shadow bg-white ">
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
+
 end

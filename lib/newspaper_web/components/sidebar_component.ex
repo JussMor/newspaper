@@ -2,7 +2,6 @@ defmodule NewspaperWeb.SidebarComponent do
   use Phoenix.LiveComponent
 
   alias Phoenix.LiveView.JS
-  import NewspaperWeb.CoreComponents
 
   def drop_options(js \\ %JS{}, selector) do
     js
