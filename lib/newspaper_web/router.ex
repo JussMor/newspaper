@@ -100,14 +100,16 @@ defmodule NewspaperWeb.Router do
       on_mount: [{NewspaperWeb.UserAuth, :ensure_authenticated}] do
       live "/authrouter", AppLive.Index, :index
 
-      live "/roles", RolesLive.Index, :index
-      live "/roles/new", RolesLive.Index, :new
-      live "/roles/:id/edit", RolesLive.Index, :edit
+      live "/settings/roles", RolesLive.Index, :index
+      live "/settings/roles/new", RolesLive.Index, :new
+      live "/settings/roles/:id/edit", RolesLive.Index, :edit
+
+      live "/settings/permissions", PermissionsLive.Index, :index
+
 
       live "/users", UsersLive.Index, :index
-
-      live "/permissions", PermissionLive.Index, :index
       live "/role_permission", RolePermissionLive.Index, :index
+
 
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email

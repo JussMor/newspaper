@@ -12,7 +12,7 @@ defmodule NewspaperWeb.RolesLive.Index do
       <.header>
         Listing Lasnews
         <:actions>
-          <.link patch={~p"/roles/new"}>
+          <.link patch={~p"/settings/roles/new"}>
             <.button>New Role</.button>
           </.link>
         </:actions>
@@ -26,7 +26,7 @@ defmodule NewspaperWeb.RolesLive.Index do
           <li id={id}>
             <strong><%= role.name %></strong><br>
             <em><%= role.description %></em><br>
-            <.link patch={~p"/roles/#{role.id}/edit"}>Edit</.link>
+            <.link patch={~p"/settings/roles/#{role.id}/edit"}>Edit</.link>
             <.link
               phx-click={JS.push("delete", value: %{id: role.id}) |> hide("##{id}")}
               data-confirm="Are you sure?"
@@ -38,14 +38,14 @@ defmodule NewspaperWeb.RolesLive.Index do
       </ul>
     </div>
 
-    <.modal :if={@live_action in [:new, :edit]} id="roles-modal" show on_cancel={JS.patch(~p"/roles")}>
+    <.modal :if={@live_action in [:new, :edit]} id="roles-modal" show on_cancel={JS.patch(~p"/settings/roles")}>
         <.live_component
           module={NewspaperWeb.RolesLive.FormComponent}
           id={@role.id || :new}
           title={@page_title}
           action={@live_action}
           role={@role}
-          patch={~p"/roles"}
+          patch={~p"/settings/roles"}
         />
     </.modal>
     """

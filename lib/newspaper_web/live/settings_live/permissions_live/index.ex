@@ -1,8 +1,8 @@
-defmodule NewspaperWeb.PermissionLive.Index do
+defmodule NewspaperWeb.PermissionsLive.Index do
   use NewspaperWeb, :live_view
 
   alias Newspaper.PermissionCategories
-  
+
   @impl true
   def render(assigns) do
     ~H"""

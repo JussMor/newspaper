@@ -1,8 +1,11 @@
 <main>
 
   <.flash_group flash={@flash} />
+
+    <%= if @current_user do %>
     <div class="flex ">
-      <.live_component module={NewspaperWeb.SidebarComponent} id={"live_component-1"} />
+       <.live_component module={NewspaperWeb.SidebarComponent} id={"live_component-1"}  current_user={@current_user} />
+
       <div class="flex-1">
           <.top_nav>
             Listing Lasnews
@@ -17,6 +20,7 @@
           </div>
       </div>
     </div>
+    <% end %>
 
 </main>
 
