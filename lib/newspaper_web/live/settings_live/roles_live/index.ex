@@ -20,7 +20,7 @@ defmodule NewspaperWeb.RolesLive.Index do
 
 
 
-  <div class="ml-6 sm:mx-6 mt-11 grid grid-cols-1 grid-rows-1 grid-flow-row-dense gap-6">
+    <div class="ml-6 sm:mx-6 mt-11 grid grid-cols-1 grid-rows-1 grid-flow-row-dense gap-6">
       <.table
         id="roles"
         rows={@streams.roles}
@@ -45,22 +45,19 @@ defmodule NewspaperWeb.RolesLive.Index do
       </.table>
     </div>
 
+     <.offcanvas title="Listing Lasnews" subtitle="List of lasnews" id="roles-offcanvas"
+     :if={@live_action in [:new, :edit]} show on_cancel={JS.patch(~p"/settings/roles")}>
+        <.live_component
+          module={NewspaperWeb.RolesLive.FormComponent}
+          id={@role.id || :new}
+          title={@page_title}
+          action={@live_action}
+          role={@role}
+          patch={~p"/settings/roles"}
+        />
+     </.offcanvas>
 
-    <.modal
-      :if={@live_action in [:new, :edit]}
-      id="roles-modal"
-      show
-      on_cancel={JS.patch(~p"/settings/roles")}
-    >
-      <.live_component
-        module={NewspaperWeb.RolesLive.FormComponent}
-        id={@role.id || :new}
-        title={@page_title}
-        action={@live_action}
-        role={@role}
-        patch={~p"/settings/roles"}
-      />
-    </.modal>
+
     """
   end
 
