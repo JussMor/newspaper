@@ -17,9 +17,17 @@ defmodule Newspaper.Roles do
       [%Role{}, ...]
 
   """
-  def list_roles do
-    Repo.all(Role)
-  end
+def list_roles(sort_opts \\ []) do
+  sort_by = Keyword.get(sort_opts, :sort_by, :name) # default sort by :name
+  sort_order = Keyword.get(sort_opts, :sort_order, :asc) # default order :asc
+
+
+  # Use the pin operator (^) to safely use the sort_by and sort_order variables in the query
+  query = from r in Role,
+    order_by: [{^sort_order, ^sort_by}]
+
+  Repo.all(query)
+end
 
   @doc """
   Gets a single role.

@@ -35,26 +35,17 @@ defmodule NewspaperWeb.RolesLive.Index do
       >
         <:col :let={{_id, role}} label={raw(check_all_html)}>
          <% checked = if (role.id in @toggle_ids), do: true, else: false %>
-            <% IO.inspect( @toggle_ids)%>
           <input type="checkbox" name="toggle"
             phx-click="toggle" phx-value-toggle-id={role.id} checked={checked} />
 
         </:col>
-        <:col :let={{_id, role}} label="Role"><%= role.name %></:col>
-        <:col :let={{_id, role}} label="Description"><%= role.description %></:col>
+        <:col :let={{_id, role}} label={raw(sort_link("name", "Role"))}><%= role.name %></:col>
+        <:col :let={{_id, role}} label={raw(sort_link("description", "Description"))}><%= role.description %></:col>
         <:action :let={{_id, role}}>
           <div class="sr-only">
             <.link navigate={~p"/settings/roles/#{role}"}>Show</.link>
           </div>
           <.link patch={~p"/settings/roles/#{role}/edit"}>Edit</.link>
-        </:action>
-        <:action :let={{id, role}}>
-          <.link
-            phx-click={JS.push("delete", value: %{id: role.id}) |> hide("##{id}")}
-            data-confirm="Are you sure?"
-          >
-            Delete
-          </.link>
         </:action>
       </.table>
     </div>
@@ -80,13 +71,20 @@ defmodule NewspaperWeb.RolesLive.Index do
 
   @impl true
   def handle_params(params, _url, socket) do
+    sort_by = params["sort_by"] || "name"  # Default sort by "name"
+    sort_order = params["sort_order"] || "asc"  # Default order "asc"
+
+    sort_opts = [
+      sort_by: String.to_existing_atom(sort_by),
+      sort_order: String.to_existing_atom(sort_order)
+    ]
 
     {:noreply,
       socket
       |> apply_action(socket.assigns.live_action, params)
-      |> stream(:roles, list_roles())
+      |> stream(:roles, list_roles(sort_opts))
       |> assign(:toggle_ids, [])
-      |> assign(:all_roles, list_roles())
+      |> assign(:all_roles, list_roles(sort_opts))
     }
   end
 
@@ -132,8 +130,6 @@ defmodule NewspaperWeb.RolesLive.Index do
         |> assign(:toggle_ids, [])}
   end
 
-
-
   def handle_event("toggle", %{"toggle-id" => id}, socket) do
     id = String.to_integer(id)
     toggle_ids = socket.assigns.toggle_ids
@@ -147,6 +143,13 @@ defmodule NewspaperWeb.RolesLive.Index do
 
     {:noreply, assign(socket, :toggle_ids, toggle_ids)}
   end
+
+  def handle_event("sort", %{"sort" => sort}, socket) do
+      IO.inspect(sort)
+
+    {:noreply, socket}
+  end
+
 
   @impl true
   def handle_event("delete_selected", _params, socket) do
@@ -164,17 +167,18 @@ defmodule NewspaperWeb.RolesLive.Index do
   end
 
 
-  @impl true
-  def handle_event("delete", %{"id" => id}, socket) do
-    role = Roles.get_role!(id)
-    {:ok, _} = Roles.delete_role(role)
 
-    {:noreply, stream_delete(socket, :roles, role)
-               |> put_flash(:info, "Role deleted successfully.")}
+
+  defp list_roles(sort_opts \\ []) do
+
+    Roles.list_roles(sort_opts)
+  end
+
+  defp sort_link(name, label) do
+
+    # Generate the HTML link with properly encoded URL
+    ~s(<button class="btn btn-link" phx-click="sort" phx-value-sort="#{name}" >#{label}</button>)
   end
 
 
-  defp list_roles() do
-    Roles.list_roles()
-  end
 end
