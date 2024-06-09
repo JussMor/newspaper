@@ -39,8 +39,9 @@ defmodule NewspaperWeb.RolesLive.Index do
             phx-click="toggle" phx-value-toggle-id={role.id} checked={checked} />
 
         </:col>
-        <:col :let={{_id, role}} label={raw(sort_link("name", "Role"))}><%= role.name %></:col>
-        <:col :let={{_id, role}} label={raw(sort_link("description", "Description"))}><%= role.description %></:col>
+        <:col :let={{_id, role}} label={raw(sort_link("name", "Role", @sort_by, @sort_order))}><%= role.name %></:col>
+        <:col :let={{_id, role}} label={raw(sort_link("description", "Description", @sort_by, @sort_order))}><%= role.description %></:col>
+
         <:action :let={{_id, role}}>
           <div class="sr-only">
             <.link navigate={~p"/settings/roles/#{role}"}>Show</.link>
@@ -82,6 +83,8 @@ defmodule NewspaperWeb.RolesLive.Index do
     {:noreply,
       socket
       |> apply_action(socket.assigns.live_action, params)
+      |> assign(:sort_by, sort_by)
+      |> assign(:sort_order, sort_order)
       |> stream(:roles, list_roles(sort_opts))
       |> assign(:toggle_ids, [])
       |> assign(:all_roles, list_roles(sort_opts))
@@ -144,11 +147,16 @@ defmodule NewspaperWeb.RolesLive.Index do
     {:noreply, assign(socket, :toggle_ids, toggle_ids)}
   end
 
-  def handle_event("sort", %{"sort" => sort}, socket) do
-      IO.inspect(sort)
+def handle_event("sort", %{"sort" => sort_field, "order" => sort_order}, socket) do
 
-    {:noreply, socket}
-  end
+  socket =
+    socket
+    |> assign(:sort_by, sort_field)
+    |> assign(:sort_order, sort_order)
+    |> push_navigate(to: ~p"/settings/roles?sort_by=#{sort_field}&sort_order=#{sort_order}")
+
+  {:noreply, socket}
+end
 
 
   @impl true
@@ -166,19 +174,25 @@ defmodule NewspaperWeb.RolesLive.Index do
          |> put_flash(:info, "Selected roles deleted successfully.")}
   end
 
-
-
-
   defp list_roles(sort_opts \\ []) do
-
     Roles.list_roles(sort_opts)
   end
 
-  defp sort_link(name, label) do
+  defp sort_link(name, label, current_sort_by, current_sort_order) do
+    {new_sort_order, symbol} =
+      if name == current_sort_by do
+        case current_sort_order do
+          "asc" -> {"desc", "↓"}
+          "desc" -> {"asc", "↑"}
+        end
+      else
+        {"asc", "↑"}
+      end
 
-    # Generate the HTML link with properly encoded URL
-    ~s(<button class="btn btn-link" phx-click="sort" phx-value-sort="#{name}" >#{label}</button>)
+    ~s(<button class="flex flex-row justify-between items-center w-full" phx-click="sort" phx-value-sort="#{name}" phx-value-order="#{new_sort_order}">
+        <p>#{label}</p>
+        <i class="">#{symbol}</i>
+    </button>)
   end
-
 
 end
