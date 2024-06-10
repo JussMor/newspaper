@@ -7,7 +7,7 @@ defmodule NewspaperWeb.RolesLive.Index do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class='px-4 pt-4'>
+    <div class='px-6 pt-6'>
       <.header>
         Listing Roles
         <:actions>

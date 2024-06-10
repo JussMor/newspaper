@@ -3,7 +3,6 @@ defmodule NewspaperWeb.UsersLive.Index do
 
   alias Newspaper.Accounts
   alias Newspaper.Roles
-  alias Newspaper.Roles.Role
   alias Newspaper.UserRoles
   alias Newspaper.UserRoles.UserRole
 

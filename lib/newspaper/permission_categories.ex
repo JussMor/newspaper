@@ -8,10 +8,10 @@ defmodule Newspaper.PermissionCategories do
 
     permissions
     |> Enum.group_by(& &1.permission_category.id)
-    |> Enum.reduce([], fn {_, perms}, acc ->
+    |> Enum.map(fn {_, perms} ->
       category = perms |> List.first() |> Map.get(:permission_category)
       perms_list = Enum.map(perms, fn perm -> %{id: perm.id, name: perm.name} end)
-      [%{id: category.id, category: category.name, permissions: perms_list} | acc]
+      %{id: category.id, category: category.name, permissions: perms_list}
     end)
   end
 
@@ -60,6 +60,10 @@ defmodule Newspaper.PermissionCategories do
       %Permission{name: "publish_#{category_name}", description: "Publish #{category_name}"},
       %Permission{name: "read_#{category_name}_only", description: "Read-only #{category_name}"}
     ]
+  end
+
+  def change_permission_category(%PermissionCategory{} = permission_category, attrs \\ %{}) do
+    PermissionCategory.changeset(permission_category, attrs)
   end
 
 end
