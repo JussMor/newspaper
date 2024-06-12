@@ -38,7 +38,10 @@ defmodule NewspaperWeb.PermissionsLive.Index do
                 </th>
               </tr>
             </thead>
-            <tbody class='relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-700'>
+            <tbody
+              id={"permissions-table"}
+              phx-update={"stream"}
+              class='relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-700'>
               <%= for {id, category} <- @streams.permissions_categories do %>
                 <tr id={id} class="group hover:bg-zinc-50">
                   <td class=' py-4 px-6'>
@@ -55,6 +58,13 @@ defmodule NewspaperWeb.PermissionsLive.Index do
                         <li class="list-none"><%= permission.name %></li>
                       </div>
                     <% end %>
+                  </td>
+                  <td class="py-4 px-6">
+                    <div class="flex items    -center space-x-2">
+                      <.link patch={~p"/settings/permissions/#{category.id}/edit"} class="text-sm text-zinc-500 hover:text-zinc-700">
+                        Edit
+                      </.link>
+                    </div>
                   </td>
                 </tr>
               <% end %>
@@ -93,10 +103,17 @@ defmodule NewspaperWeb.PermissionsLive.Index do
   end
 
   defp apply_action(socket, :new, _params) do
-    IO.inspect(socket)
     socket
     |> assign(:page_title, "New Category Permission")
     |> assign(:permission_category, %PermissionCategory{})
+  end
+
+  defp apply_action(socket, :edit, %{"id" => id}) do
+    permission_category = PermissionCategories.get_permission_category!(id)
+
+    socket
+    |> assign(:page_title, "Edit Category Permission")
+    |> assign(:permission_category, permission_category)
   end
 
   defp apply_action(socket, :index, _params) do

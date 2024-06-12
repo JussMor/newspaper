@@ -21,6 +21,10 @@ defmodule Newspaper.PermissionCategories do
     |> Repo.insert()
   end
 
+  def get_permission_category!(id) do
+    Repo.get!(PermissionCategory, id)
+  end
+
   def create_permission(attrs \\ %{}) do
     %Permission{}
     |> Permission.changeset(attrs)
@@ -31,6 +35,30 @@ defmodule Newspaper.PermissionCategories do
     %PermissionCategory{}
     |> PermissionCategory.changeset(category_attrs)
     |> Repo.insert()
+    |> case do
+      {:ok, category} ->
+        permissions = predefined_permissions(category.name)
+        permissions = Enum.map(permissions, &Map.put(&1, :permission_category_id, category.id))
+
+        inserted_permissions = for permission <- permissions do
+          case Repo.insert(permission) do
+            {:ok, permission} -> permission
+            {:error, changeset} ->
+              IO.inspect(changeset.errors, label: "Error inserting permission #{permission.name}")
+              nil
+          end
+        end
+        |> Enum.filter(& &1) # Filter out nil values
+
+        {:ok, category, inserted_permissions}
+      {:error, changeset} ->
+        {:error, changeset}
+    end
+  end
+
+  def update_category_with_permissions(%PermissionCategory{} = category, attrs) do
+    PermissionCategory.changeset(category, attrs)
+    |> Repo.update()
     |> case do
       {:ok, category} ->
         permissions = predefined_permissions(category.name)

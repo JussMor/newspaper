@@ -44,12 +44,16 @@ defmodule NewspaperWeb.PermissionsLive.FormComponent do
   def update(%{permission_category:  permission_category} = assigns, socket) do
     changeset = PermissionCategories.change_permission_category(permission_category)
 
+
+   current_name = if permission_category.name == "", do: "", else: permission_category.name
+
    {:ok,
      socket
      |> assign(assigns)
-     |> assign(:current_name, "")
+     |> assign(:current_name, current_name)
      |> assign_form(changeset)}
   end
+
 
   @impl true
   def handle_event("validate", %{"permission_category" => permission_category_new_params}, socket) do
@@ -59,7 +63,6 @@ defmodule NewspaperWeb.PermissionsLive.FormComponent do
       |> PermissionCategories.change_permission_category(permission_category_new_params)
       |> Map.put(:action, :validate)
 
-      IO.inspect(changeset)
     current_name = permission_category_new_params["name"] || ""
 
     {:noreply,
@@ -68,9 +71,28 @@ defmodule NewspaperWeb.PermissionsLive.FormComponent do
        |> assign(:current_name, current_name) }
   end
 
-  def handle_event("save", %{"permission_category" => permission_category_new_params}, socket) do
+def handle_event("save", %{"permission_category" => permission_category_new_params}, socket) do
     save_permission_category(socket, socket.assigns.action, permission_category_new_params)
+end
+
+defp save_permission_category(socket, :edit, permission_category_new_params) do
+  case PermissionCategories.update_category_with_permissions(socket.assigns.permission_category, permission_category_new_params) do
+    {:ok, permission_category, inserted_permissions} ->
+      # Log the successful creation
+      IO.puts("Permission category updated successfully: #{inspect(permission_category)}")
+      IO.puts("Inserted permissions: #{inspect(inserted_permissions)}")
+
+      {:noreply,
+        socket
+        |> put_flash(:info, "Permission category updated successfully")
+        |> push_patch(to: socket.assigns.patch)
+      }
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, assign_form(socket, changeset)}
   end
+end
+
 
 defp save_permission_category(socket, :new, permission_category_new_params) do
   case PermissionCategories.create_category_with_permissions(permission_category_new_params) do
@@ -80,12 +102,6 @@ defp save_permission_category(socket, :new, permission_category_new_params) do
       IO.puts("Inserted permissions: #{inspect(inserted_permissions)}")
 
       {:noreply,
-        socket
-        |> put_flash(:info, "Permission category created successfully")
-        |> push_patch(to: socket.assigns.patch)
-      }
-
-        {:noreply,
         socket
         |> put_flash(:info, "Permission category created successfully")
         |> push_patch(to: socket.assigns.patch)
@@ -101,7 +117,5 @@ defp save_permission_category(socket, :new, permission_category_new_params) do
     assign(socket, :form, to_form(changeset))
   end
 
-
-  defp notify_parent(msg), do: send(self(), {__MODULE__, msg})
 
 end
