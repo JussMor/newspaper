@@ -1,4 +1,6 @@
 defmodule Newspaper.PermissionCategories do
+
+  import Ecto.Query, warn: false
   alias Newspaper.Repo
   alias Newspaper.Permissions.Permission
   alias Newspaper.PermissionCategories.PermissionCategory
@@ -25,10 +27,9 @@ defmodule Newspaper.PermissionCategories do
     Repo.get!(PermissionCategory, id)
   end
 
-  def create_permission(attrs \\ %{}) do
-    %Permission{}
-    |> Permission.changeset(attrs)
-    |> Repo.insert()
+
+  def delete_selected_permissions(%PermissionCategory{} = category) do
+    Repo.delete(category)
   end
 
   def create_category_with_permissions(category_attrs) do

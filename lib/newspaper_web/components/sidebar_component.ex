@@ -320,7 +320,7 @@ defmodule NewspaperWeb.SidebarComponent do
                 module={NewspaperWeb.AuthComponent}
                 id="settings-component-auth"
                 data={@current_user}
-                permission_to_check={["insert_article"]}
+                permission_to_check={["insert_user"]}
               >
                 <li>
                   <a

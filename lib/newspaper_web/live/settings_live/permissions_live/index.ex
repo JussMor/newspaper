@@ -45,7 +45,9 @@ defmodule NewspaperWeb.PermissionsLive.Index do
               <%= for {id, category} <- @streams.permissions_categories do %>
                 <tr id={id} class="group hover:bg-zinc-50">
                   <td class=' py-4 px-6'>
-                    <input type="checkbox" name="toggle-all" id="toggle-all" phx-click="toggle-all" phx-update="ignore" />
+                    <% checked = if (category.id in @toggle_ids), do: true, else: false %>
+                        <input type="checkbox" name="toggle"
+                          phx-click="toggle" phx-value-toggle-id={category.id} checked={checked} />
                   </td>
                   <td class="w-1/3 relative">
                     <div class="block py-4 px-6">
@@ -98,6 +100,7 @@ defmodule NewspaperWeb.PermissionsLive.Index do
       socket
       |> stream(:permissions_categories, list_category_permissions())
       |> apply_action(socket.assigns.live_action, params)
+      |> assign(:toggle_ids, [])
 
     {:noreply, socket}
   end
@@ -125,4 +128,36 @@ defmodule NewspaperWeb.PermissionsLive.Index do
   defp list_category_permissions do
     PermissionCategories.get_categorized_permissions()
   end
+
+  @impl true
+  def handle_event("toggle", %{"toggle-id" => id}, socket) do
+    id = String.to_integer(id)
+    toggle_ids = socket.assigns.toggle_ids
+
+    toggle_ids =
+      if (id in toggle_ids) do
+        Enum.reject(toggle_ids, & &1 == id)
+      else
+        [id|toggle_ids]
+      end
+
+    {:noreply, assign(socket, :toggle_ids, toggle_ids)}
+  end
+
+  @impl true
+  def handle_event("delete_selected", _params, socket) do
+    toggle_ids = socket.assigns.toggle_ids
+
+    socket =
+      Enum.reduce(toggle_ids, socket, fn id, acc ->
+        category = PermissionCategories.get_permission_category!(id)
+        {:ok, _} = PermissionCategories.delete_selected_permissions(category)
+        stream_delete(acc, :permissions_categories, category)
+      end)
+
+    {:noreply, assign(socket, toggle_ids: [])
+         |> put_flash(:info, "Selected roles deleted successfully.")}
+  end
+
+
 end
