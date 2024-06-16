@@ -6,24 +6,23 @@ defmodule NewspaperWeb.OffcanvasComponent do
   import NewspaperWeb.CoreComponents
 
   def showcanvas(js \\ %JS{}, selector) do
-    JS.show(js,
-      to: selector,
-      transition:
-        {"transition-all transform ease-out duration-300",
-         "opacity-0  sm:translate-y-0 sm:scale-95",
-         "opacity-100 translate-y-0 sm:scale-100"}
-    )
-  end
-
-  def hidecanvas(js \\ %JS{}, selector) do
-    JS.hide(js,
+    JS.toggle_class(js, "translate-x-full ",
       to: selector,
       time: 200,
       transition:
-        {"transition-all transform ease-in duration-200",
-         "opacity-100 translate-y-0 sm:scale-100",
-         "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"}
-    )
+        {"transition transform ease-in-out duration-300",
+         "translate-x-full ",
+         "translate-x-0 "})
+  end
+
+  def hidecanvas(js \\ %JS{}, selector) do
+    JS.toggle_class(js, "translate-x-0 ",
+      to: selector,
+      time: 200,
+      transition:
+        {"transition transform ease-in-out duration-300",
+         "translate-x-0",
+         "translate-x-full "})
   end
 
   def show_offcanvas(js \\ %JS{}, id) when is_binary(id) do
@@ -31,7 +30,7 @@ defmodule NewspaperWeb.OffcanvasComponent do
     |> JS.show(to: "##{id}")
     |> JS.show(
       to: "##{id}-bg",
-      transition: {"transition-all  translate-x-full transform ease-out duration-300", "opacity-0", "opacity-100"}
+      transition: {"transition-all transform ease-out duration-300", "opacity-0", "opacity-0"}
     )
     |> showcanvas("##{id}-container")
     |> JS.add_class("overflow-hidden", to: "body")
@@ -42,10 +41,10 @@ defmodule NewspaperWeb.OffcanvasComponent do
     js
     |> JS.hide(
       to: "##{id}-bg",
-      transition: {"transition-all translate-x-full transform ease-in duration-200", "opacity-100", "opacity-0"}
+      transition: {"transition-all  transform ease-in duration-500", "opacity-100", "opacity-0"}
     )
     |> hidecanvas("##{id}-container")
-    |> JS.hide(to: "##{id}", transition: {"block", "block", "hidden"})
+
     |> JS.remove_class("overflow-hidden", to: "body")
     |> JS.pop_focus()
   end
@@ -53,21 +52,21 @@ defmodule NewspaperWeb.OffcanvasComponent do
     def  offcanvas(assigns) do
     ~H"""
     <div
-        class=" fixed top-0 right-0  h-full visible   z-[999] "
+        class="fixed top-0 right-0 z-50 "
         id={@id}
         phx-mounted={@show && show_offcanvas(@id)}
         phx-remove={hide_offcanvas(@id)}
         data-cancel={JS.exec(@on_cancel, "phx-remove")}
         aria-labelledby="offcanvasRightLabel"
         >
-         <div id={"#{@id}-bg"} class="bg-slate-950/30 fixed inset-0 transition-opacity" aria-hidden="true" />
+         <div id={"#{@id}-bg"} class="bg-slate-950/30 fixed inset-0" aria-hidden="true" />
         <div >
               <.focus_wrap
               id={"#{@id}-container"}
               phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
               phx-key="escape"
               phx-click-away={JS.exec("data-cancel", to: "##{@id}")}
-              class="shadow-zinc-700/10 ring-zinc-700/10 relative hidden min-h-svh  bg-white p-14 shadow-lg ring-1 transition"
+              class="shadow-zinc-700/10 ring-zinc-700/10 relative  translate-x-full min-h-dvh bg-white p-14 shadow-lg ring-1 "
             >
               <div class="absolute top-6 right-5">
                 <button
