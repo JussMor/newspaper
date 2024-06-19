@@ -3,6 +3,16 @@ defmodule NewspaperWeb.HeaderComponent do
 
   alias Phoenix.LiveView.JS
 
+
+  def drop_options(js \\ %JS{}, selector) do
+    js
+    |>  JS.toggle(
+          to: selector,
+          in: {"transition-[width] transform ease-in-out duration-200 w-[100px] w-[250px]", "", ""},
+          out: {"transition-[width] transform ease-in-out duration-200 w-[250px] w-[100px]", "", ""}
+      )
+  end
+
   attr :class, :string, default: nil
 
   slot :inner_block, required: true
@@ -12,7 +22,7 @@ defmodule NewspaperWeb.HeaderComponent do
   def top_nav(assigns) do
     ~H"""
     <header class="sticky top-0 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
-      <div class="flex flex-grow items-center justify-between px-4 py-4 shadow-2 md:px-6 2xl:px-11">
+      <div class="flex flex-grow items-center justify-between px-2 py-4 shadow-2 md:px-6">
         <div class="flex items-center gap-2 sm:gap-4 lg:hidden">
           <!-- Hamburger Toggle BTN -->
           <button
@@ -57,7 +67,7 @@ defmodule NewspaperWeb.HeaderComponent do
           </a>
         </div>
         <div class="hidden sm:flex sm:gap-4">
-          <div class="hidden  lg:block">
+          <div class="hidden  lg:flex lg:justify-center cursor-pointer" phx-click={drop_options("#modal")}>
             <img src="/images/logo/logo-icon.svg" alt="Logo" />
           </div>
           <form action="https://formbold.com/s/unique_form_id" method="POST">

@@ -6,7 +6,7 @@ defmodule NewspaperWeb.SidebarComponent do
   def drop_options(js \\ %JS{}, selector) do
     js
     |> JS.hide(
-      transition: "-translate-x-full",
+      transition: "-translate-x-full duration-300 ease-linear",
       time: 1000,
       to: selector
     )
@@ -18,10 +18,8 @@ defmodule NewspaperWeb.SidebarComponent do
     ~H"""
     <aside
       id="modal"
-      phx-remove={drop_options("#modal")}
-      classs="sidebarToggle ? 'translate-x-0' : '-translate-x-full'"
-      class="absolute left-0 top-0 z-10 flex h-screen w-[250px] flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0"
-      @click.outside="sidebarToggle = false"
+      class="absolute left-0 top-0 z-10 flex h-screen w-[250px] flex-col overflow-y-hidden bg-black  dark:bg-boxdark lg:static lg:translate-x-0"
+
     >
       <!-- SIDEBAR HEADER -->
       <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
