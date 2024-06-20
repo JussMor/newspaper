@@ -2,6 +2,7 @@ defmodule NewspaperWeb.Router do
   use NewspaperWeb, :router
 
   import NewspaperWeb.UserAuth
+  import NewspaperWeb.Sidebar
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -11,6 +12,7 @@ defmodule NewspaperWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_user
+
   end
 
   pipeline :api do
@@ -97,7 +99,7 @@ defmodule NewspaperWeb.Router do
     pipe_through [:browser, :require_authenticated_user]
 
     live_session :require_authenticated_user,
-      on_mount: [{NewspaperWeb.UserAuth, :ensure_authenticated}] do
+      on_mount: [{NewspaperWeb.UserAuth, :ensure_authenticated},{NewspaperWeb.Sidebar, :mount_sidebar}] do
       live "/authrouter", AppLive.Index, :index
 
       live "/settings/roles", RolesLive.Index, :index

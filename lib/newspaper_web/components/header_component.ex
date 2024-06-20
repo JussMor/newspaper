@@ -4,15 +4,6 @@ defmodule NewspaperWeb.HeaderComponent do
   alias Phoenix.LiveView.JS
 
 
-  def drop_options(js \\ %JS{}, selector) do
-    js
-    |>  JS.toggle(
-          to: selector,
-          in: {"transition-[width] transform ease-in-out duration-200 w-[100px] w-[250px]", "", ""},
-          out: {"transition-[width] transform ease-in-out duration-200 w-[250px] w-[100px]", "", ""}
-      )
-  end
-
   attr :class, :string, default: nil
 
   slot :inner_block, required: true
@@ -67,9 +58,6 @@ defmodule NewspaperWeb.HeaderComponent do
           </a>
         </div>
         <div class="hidden sm:flex sm:gap-4">
-          <div class="hidden  lg:flex lg:justify-center cursor-pointer" phx-click={drop_options("#modal")}>
-            <img src="/images/logo/logo-icon.svg" alt="Logo" />
-          </div>
           <form action="https://formbold.com/s/unique_form_id" method="POST">
             <div class="relative">
               <button class="absolute left-0 top-1/2 -translate-y-1/2">

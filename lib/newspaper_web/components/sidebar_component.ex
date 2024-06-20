@@ -23,8 +23,8 @@ defmodule NewspaperWeb.SidebarComponent do
     >
       <!-- SIDEBAR HEADER -->
       <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
-        <a href="index.html">
-          <img src="#" alt="Logo" />
+        <a href="#">
+            <img src="/images/logo/logo-icon.svg" alt="Logo" />
         </a>
 
         <button class="block lg:hidden" phx-click={drop_options("#modal")}>
