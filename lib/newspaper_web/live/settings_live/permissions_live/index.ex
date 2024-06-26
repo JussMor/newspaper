@@ -95,12 +95,13 @@ defmodule NewspaperWeb.PermissionsLive.Index do
   end
 
   @impl true
-  def handle_params(params, _url, socket) do
+  def handle_params(params, url, socket) do
     socket =
       socket
       |> stream(:permissions_categories, list_category_permissions())
       |> apply_action(socket.assigns.live_action, params)
       |> assign(:toggle_ids, [])
+      |> apply_sidebar( params, url)
 
     {:noreply, socket}
   end
@@ -123,6 +124,27 @@ defmodule NewspaperWeb.PermissionsLive.Index do
     socket
     |> assign(:page_title, "Listing Category Permission")
     |> assign(:permission_category, nil)
+  end
+
+  defp apply_sidebar(socket, params, url) do
+    option = geturlPath(url, 2)
+    tab = geturlPath(url, 1)
+
+    socket
+    |> assign(:active_tab, tab)
+    |> assign(:active_opt, option)
+  end
+
+  def geturlPath(url, number) do
+    case URI.parse(url) do
+      %URI{path: path} ->
+        path_parts = String.split(path, "/", trim: true)
+        case Enum.at(path_parts, number - 1) do
+          nil -> "Index out of bounds"
+          part -> part
+        end
+      _ -> "Invalid URL"
+    end
   end
 
   defp list_category_permissions do

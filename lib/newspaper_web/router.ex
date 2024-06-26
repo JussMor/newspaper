@@ -106,9 +106,9 @@ defmodule NewspaperWeb.Router do
       live "/settings/roles/new", RolesLive.Index, :new
       live "/settings/roles/:id/edit", RolesLive.Index, :edit
 
-      live "/settings/permissions", PermissionsLive.Index, :index
-      live "/settings/permissions/new", PermissionsLive.Index, :new
-      live "/settings/permissions/:id/edit", PermissionsLive.Index, :edit
+      live "/security/permissions", PermissionsLive.Index, :index
+      live "/security/permissions/new", PermissionsLive.Index, :new
+      live "/security/permissions/:id/edit", PermissionsLive.Index, :edit
 
 
       live "/users", UsersLive.Index, :index

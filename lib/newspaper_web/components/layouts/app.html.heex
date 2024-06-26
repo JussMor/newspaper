@@ -4,7 +4,9 @@
 
   <div class="flex ">
       <%= if @current_user do %>
-       <.live_component module={NewspaperWeb.SidebarComponent} id={"live_component-1"}  current_user={@current_user} />
+       <.live_component module={NewspaperWeb.SidebarComponent} id={"live_component-1"}  current_user={@current_user} active_tab={@active_tab}
+       active_opt={@active_opt}
+       />
       <% end %>
       <div class="flex-1">
           <.top_nav>

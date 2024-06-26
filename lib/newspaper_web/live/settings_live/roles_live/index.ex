@@ -71,7 +71,7 @@ defmodule NewspaperWeb.RolesLive.Index do
   end
 
   @impl true
-  def handle_params(params, _url, socket) do
+  def handle_params(params, url, socket) do
     sort_by = params["sort_by"] || "name"  # Default sort by "name"
     sort_order = params["sort_order"] || "asc"  # Default order "asc"
 
@@ -80,6 +80,7 @@ defmodule NewspaperWeb.RolesLive.Index do
       sort_order: String.to_existing_atom(sort_order)
     ]
 
+    # IO.inspect(socket)
     {:noreply,
       socket
       |> apply_action(socket.assigns.live_action, params)
@@ -88,6 +89,7 @@ defmodule NewspaperWeb.RolesLive.Index do
       |> stream(:roles, list_roles(sort_opts))
       |> assign(:toggle_ids, [])
       |> assign(:all_roles, list_roles(sort_opts))
+      |> apply_sidebar( params, url)
     }
   end
 
@@ -109,6 +111,30 @@ defmodule NewspaperWeb.RolesLive.Index do
     |> assign(:page_title, "Listing Roles")
     |> assign(:role, nil)
   end
+
+  defp apply_sidebar(socket, params, url) do
+
+    option = geturlPath(url, 2)
+    tab = geturlPath(url, 1)
+
+    socket
+    |> assign(:active_tab, tab)
+    |> assign(:active_opt, option)
+
+  end
+
+  def geturlPath(url, number) do
+    case URI.parse(url) do
+      %URI{path: path} ->
+        path_parts = String.split(path, "/", trim: true)
+        case Enum.at(path_parts, number - 1) do
+          nil -> "Index out of bounds"
+          part -> part
+        end
+      _ -> "Invalid URL"
+    end
+  end
+  
 
   @impl true
   def handle_info({NewspaperWeb.RolesLive.FormComponent, {:saved, role}}, socket) do
