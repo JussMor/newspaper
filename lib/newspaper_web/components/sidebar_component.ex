@@ -70,7 +70,7 @@ defmodule NewspaperWeb.SidebarComponent do
                           />
                         </g>
                         <defs>
-                          <clipPath id="clip0_130_9763">
+                          <clipPath id="clip0_130_9763_4">
                             <rect width="18" height="18" fill="white" transform="translate(0 0.052124)" />
                           </clipPath>
                         </defs>

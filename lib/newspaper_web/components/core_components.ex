@@ -478,11 +478,11 @@ def table(assigns) do
 
 
   ~H"""
-  <div class="overflow-x-auto bg-white shadow">
+  <div class="overflow-x-auto bg-white shadow-lg rounded-md">
     <table class="min-w-full">
-      <thead class="text-sm text-left leading-6 text-zinc-500">
+      <thead class="text-sm text-left leading-6 text-zinc-500 bg-zinc-50">
         <tr>
-          <th :for={col <- @col} class="py-4 px-6 font-normal"><%= col[:label] %></th>
+          <th :for={col <- @col} class="py-2 px-6 font-normal"><%= col[:label] %></th>
           <th :if={@action != []} class="relative p-0 pb-4">
             <span class="sr-only"><%= gettext("Actions") %></span>
           </th>
@@ -491,7 +491,7 @@ def table(assigns) do
       <tbody
         id={@id}
         phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
-        class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-700"
+        class="relative divide-y divide-zinc-100 bg-white border-t border-zinc-200 text-sm leading-6 text-zinc-700"
       >
         <tr :for={{id, item} <- @rows} id={@row_id && @row_id.({id, item})} class="group hover:bg-zinc-50">
           <td
@@ -499,7 +499,7 @@ def table(assigns) do
             phx-click={@row_click && @row_click.({id, item})}
             class={["relative ", @row_click && "hover:cursor-pointer"]}
           >
-            <div class="block py-4 px-6">
+            <div class="block py-2 px-6">
               <span class="absolute right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
               <span class={["relative", i == 0 && "font-semibold text-zinc-900"]}>
                 <%= render_slot(col, @row_item.({id, item})) %>
@@ -507,7 +507,7 @@ def table(assigns) do
             </div>
           </td>
           <td :if={@action != []} class="relative w-14 p-0">
-            <div class="relative whitespace-nowrap py-4 px-6 text-right text-sm font-medium">
+            <div class="relative whitespace-nowrap py-2 px-6 text-right text-sm font-medium">
               <span class="absolute -right-4 left-0 group-hover:bg-zinc-50 sm:rounded-r-xl" />
               <span
                 :for={action <- @action}
